@@ -10,6 +10,6 @@ import lombok.Setter;
 public class Pieza {
     int idPieza;
     String tipo;
-    int costo;
+    float costo;
     int existencia;
 }

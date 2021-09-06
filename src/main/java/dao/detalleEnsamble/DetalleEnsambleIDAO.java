@@ -33,6 +33,7 @@ public class DetalleEnsambleIDAO implements DetalleEnsambleDAO{
             ps.setInt(2, dE.getIdEnsamble());
             ps.setInt(3, dE.getIdPieza());
             ps.setInt(4, dE.getCostoVenta());
+            ps.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
