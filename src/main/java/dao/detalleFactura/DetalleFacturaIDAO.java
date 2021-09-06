@@ -33,6 +33,7 @@ public class DetalleFacturaIDAO implements DetalleFacturaDAO{
             ps.setInt(2, dF.getIdFactura());
             ps.setInt(3, dF.getIdEnsmable());
             ps.setInt(4, dF.getPrecioVenta());
+            ps.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

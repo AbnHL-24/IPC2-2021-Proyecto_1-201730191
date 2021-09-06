@@ -31,6 +31,7 @@ public class UsuarioIDAO implements UsuarioDAO{
             ps.setString(2, u.getPassword());
             ps.setInt(3, u.getTipoUsuario() );
             ps.setInt(4, u.getEstadoUsuario());
+            ps.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

@@ -33,6 +33,7 @@ public class DevolucionIDAO implements DevolucionDAO{
             ps.setInt(2, d.getIdFactura());
             ps.setInt(3, d.getCodigoEnsamble());
             ps.setInt(4, d.getPiezaDefectuosa());
+            ps.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

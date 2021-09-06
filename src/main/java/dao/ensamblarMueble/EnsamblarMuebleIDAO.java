@@ -36,6 +36,7 @@ public class EnsamblarMuebleIDAO implements EnsamblarMuebleDAO{
             ps.setString(3, eM.getMueble());
             ps.setString(4, eM.getUsuario());
             ps.setInt(5, eM.getEstadoVenta());
+            ps.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

@@ -1,15 +1,24 @@
 package utils.archivos;
 
+import dao.cliente.ClienteIDAO;
+import dao.ensamblarMueble.EnsamblarMuebleIDAO;
+import dao.mueble.MuebleIDAO;
 import dao.pieza.PiezaIDAO;
+import dao.piezaEnsamble.PiezaEnsambleIDAO;
 import dao.usuario.UsuarioIDAO;
-import modelo.Pieza;
-import modelo.Usuario;
+import modelo.*;
 
+import java.rmi.server.UID;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import static utils.validaciones.ValidacionCliente.validarCliente;
+import static utils.validaciones.ValidacionEmsamblePiezas.validarEnsamblePiezas;
+import static utils.validaciones.ValidacionMueble.validarMueble;
 import static utils.validaciones.ValidacionPieza.validarPieza;
 import static utils.validaciones.ValidacionUsuario.validarUsuario;
 
@@ -70,12 +79,70 @@ public class CargarDatosDesdeArchivo {
                 }
 
             } else if (datos.get(i).toUpperCase().startsWith("MUEBLE")) {
+                MuebleIDAO muebleIDAO = MuebleIDAO.getMuebleIDAO();
+                if (!muebleIDAO.existe(parametros[0])) {
+                    if (validarMueble(parametros)) {
+                        Mueble mueble = Mueble.builder()
+                                .mueble(parametros[0])
+                                .precio(Float.parseFloat(parametros[1]))
+                                .build();
+                        muebleIDAO.crear(mueble);
+                    }
+                }
 
             } else if (datos.get(i).toUpperCase().startsWith("ENSAMBLE_PIEZAS")) {
+                MuebleIDAO muebleIDAO = MuebleIDAO.getMuebleIDAO();
+                PiezaIDAO piezaIDAO = PiezaIDAO.getPiezaIDAO();
+                PiezaEnsambleIDAO piezaEnsambleIDAO = PiezaEnsambleIDAO.getPiezaEnsambleIDAO();
+
+                if (validarEnsamblePiezas(parametros)) {
+                    if (muebleIDAO.existe(parametros[0])) {
+                        if (piezaIDAO.existe(parametros[1])) {
+                            if (!piezaEnsambleIDAO.existe(parametros[0], parametros[1])) {
+                                PiezaEnsamble piezaEnsamble = PiezaEnsamble.builder()
+                                        .mubele(parametros[0])
+                                        .pieza(parametros[1])
+                                        .cantidad(parametros[2])
+                                        .build();
+                                piezaEnsambleIDAO.crear(piezaEnsamble);
+                            }
+                        }
+                    }
+                }
 
             } else if (datos.get(i).toUpperCase().startsWith("ENSAMBLAR_MUEBLE")) {
+                MuebleIDAO muebleIDAO = MuebleIDAO.getMuebleIDAO();
+                UsuarioIDAO usuarioIDAO = UsuarioIDAO.getUsuarioIDAO();
+                EnsamblarMuebleIDAO ensamblarMuebleIDAO = EnsamblarMuebleIDAO.getEnsamblarMuebleIDAO();
+                if (muebleIDAO.existe(parametros[0])) {
+                    if (usuarioIDAO.existe(parametros[1])) {
+                        EnsamblarMueble ensamblarMueble = EnsamblarMueble.builder()
+                                .mueble(parametros[0])
+                                .usuario(parametros[1])
+                                .fecha(LocalDate.parse(parametros[2], DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                                .estadoVenta(1)
+                                .build();
+                        ensamblarMuebleIDAO.crear(ensamblarMueble);
+                    }
+                }
 
             } else if (datos.get(i).toUpperCase().startsWith("CLIENTE")) {
+                ClienteIDAO clienteIDAO = ClienteIDAO.getClienteIDAO();
+                //si no existe el nit cree al usuario.
+                if (!clienteIDAO.existe(parametros[1])) {
+                    if (validarCliente(parametros)) {
+                        Cliente cliente = Cliente.builder()
+                                .nombre(String.valueOf(parametros[0]))
+                                .nitCliente(String.valueOf(parametros[1]))
+                                .direccion(String.valueOf(parametros[2]))
+                                .build();
+                        if (parametros.length == 5) {
+                            cliente.setMunicipio(String.valueOf(parametros[3]));
+                            cliente.setDepartamento(String.valueOf(parametros[4]));
+                        }
+                        clienteIDAO.crear(cliente);
+                    }
+                }
 
             }
         }

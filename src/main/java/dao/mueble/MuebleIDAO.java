@@ -28,7 +28,8 @@ public class MuebleIDAO implements MuebleDAO{
 
         try (PreparedStatement ps = conexion.prepareStatement(consulta)) {
             ps.setString(1, m.getMueble());
-            ps.setInt(2, m.getPrecio());
+            ps.setFloat(2, m.getPrecio());
+            ps.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

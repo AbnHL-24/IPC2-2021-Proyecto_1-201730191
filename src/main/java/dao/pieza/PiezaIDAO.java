@@ -40,7 +40,7 @@ public class PiezaIDAO implements PiezaDAO{
 
     @Override
     public Pieza leer(String id) {
-        String sql = "SELECT * FROM Pieza WHERE id = ?";
+        String sql = "SELECT * FROM Pieza WHERE tipo = ?";
 
         Pieza pieza = null;
         try ( PreparedStatement ps = conexion.prepareStatement(sql) ) {
@@ -136,7 +136,7 @@ public class PiezaIDAO implements PiezaDAO{
 
     @Override
     public boolean existe(String id, String precio) {
-        String sql = "SELECT id FROM Pieza WHERE id = ? AND costo = ?";
+        String sql = "SELECT id FROM Pieza WHERE tipo = ? AND costo = ?";
         boolean flag = false;
         try (PreparedStatement ps = conexion.prepareStatement(sql)) {
             ps.setString(1, id);

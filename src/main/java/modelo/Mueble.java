@@ -9,5 +9,5 @@ import lombok.Setter;
 @Builder
 public class Mueble {
     String mueble;
-    int precio;
+    float precio;
 }

@@ -5,6 +5,7 @@ import modelo.PiezaEnsamble;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -24,13 +25,13 @@ public class PiezaEnsambleIDAO implements PiezaEnsambleDAO{
 
     @Override
     public void crear(PiezaEnsamble pE) {
-        String consulta = "INSERT INTO PiezaParaEnsamble VALUES(?, ?, ?, ?)";
+        String consulta = "INSERT INTO PiezaParaEnsamble VALUES(?, ?, ?)";
 
         try (PreparedStatement ps = conexion.prepareStatement(consulta)) {
-            ps.setInt(1, pE.getIdPiezaParaEnsamble());
-            ps.setString(2, pE.getMubele().toString());
-            ps.setString(3, pE.getPieza());
-            ps.setString(4, pE.getCantidad());
+            ps.setString(1, pE.getMubele().toString());
+            ps.setString(2, pE.getPieza());
+            ps.setString(3, pE.getCantidad());
+            ps.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -59,5 +60,24 @@ public class PiezaEnsambleIDAO implements PiezaEnsambleDAO{
     @Override
     public boolean existe(String id) {
         return false;
+    }
+
+    @Override
+    public boolean existe(String mueble, String pieza) {
+        String sql = "SELECT id FROM PiezaParaEnsamble WHERE mueble = ? AND pieza = ?";
+        boolean flag = false;
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, mueble);
+            ps.setString(2, pieza);
+            try (ResultSet rs =  ps.executeQuery()) {
+                if (rs.next()) {
+                    flag = true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return flag;
     }
 }
