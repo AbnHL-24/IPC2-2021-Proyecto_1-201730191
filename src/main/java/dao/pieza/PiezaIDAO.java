@@ -3,11 +3,13 @@ package dao.pieza;
 import dao.Conexion;
 import dao.ensamblarMueble.EnsamblarMuebleIDAO;
 import modelo.Pieza;
+import modelo.Usuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PiezaIDAO implements PiezaDAO{
@@ -26,7 +28,7 @@ public class PiezaIDAO implements PiezaDAO{
 
     @Override
     public void crear(Pieza p) {
-        String consulta = "INSERT INTO Pieza VALUES(?, ?, ?)";
+        String consulta = "INSERT INTO Pieza(tipo, costo, existencias) VALUES(?, ?, ?)";
 
         try (PreparedStatement ps = conexion.prepareStatement(consulta)) {
             ps.setString(1, p.getTipo());
@@ -34,13 +36,13 @@ public class PiezaIDAO implements PiezaDAO{
             ps.setInt(3, p.getExistencia());
             ps.executeUpdate();
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            throwables.printStackTrace(System.out);
         }
     }
 
     @Override
     public Pieza leer(String id) {
-        String sql = "SELECT * FROM Pieza WHERE tipo = ?";
+        String sql = "SELECT * FROM Pieza WHERE id = ?";
 
         Pieza pieza = null;
         try ( PreparedStatement ps = conexion.prepareStatement(sql) ) {
@@ -65,8 +67,7 @@ public class PiezaIDAO implements PiezaDAO{
 
     @Override
     public void actualizar(Pieza p) {
-        String sql = "UPDATE Pieza SET tipo = ?, costo = ?, existencias = ?, "
-                + "WHERE id = ?";
+        String sql = "UPDATE Pieza SET tipo = ?, costo = ?, existencias = ? WHERE id = ?";
 
         try ( PreparedStatement ps = conexion.prepareStatement(sql)) {
             ps.setString(1, p.getTipo());
@@ -76,7 +77,7 @@ public class PiezaIDAO implements PiezaDAO{
             ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace(System.out);
-            System.out.println("No se pudo editar el cliente");
+            System.out.println("No se pudo editar la pieza");
         }
     }
 
@@ -87,7 +88,24 @@ public class PiezaIDAO implements PiezaDAO{
 
     @Override
     public List<Pieza> getList() {
-        return null;
+        String sql = "SELECT * FROM Pieza";
+        List<Pieza> piezas = null;
+
+        try ( PreparedStatement ps = conexion.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            piezas = new ArrayList();
+
+            while (rs.next()) {
+                piezas.add(Pieza.builder()
+                        .idPieza(rs.getInt("id"))
+                        .tipo(rs.getString("tipo"))
+                        .costo(rs.getFloat("costo"))
+                        .existencia(rs.getInt("existencias"))
+                        .build());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
+        return piezas;
     }
 
     @Override
@@ -109,8 +127,27 @@ public class PiezaIDAO implements PiezaDAO{
     }
 
     @Override
+    public boolean existe(String id, String precio) {
+        String sql = "SELECT id FROM Pieza WHERE tipo = ? AND costo = ?";
+        boolean flag = false;
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, id);
+            ps.setFloat(2, Float.parseFloat(precio));
+            try (ResultSet rs =  ps.executeQuery()) {
+                if (rs.next()) {
+                    flag = true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return flag;
+    }
+
+    @Override
     public Pieza leer(String id, String precio) {
-        String sql = "SELECT * FROM Pieza WHERE id = ? AND costo = ?";
+        String sql = "SELECT * FROM Pieza WHERE tipo = ? AND costo = ?";
 
         Pieza pieza = null;
         try ( PreparedStatement ps = conexion.prepareStatement(sql) ) {
@@ -132,24 +169,5 @@ public class PiezaIDAO implements PiezaDAO{
         }
 
         return pieza;
-    }
-
-    @Override
-    public boolean existe(String id, String precio) {
-        String sql = "SELECT id FROM Pieza WHERE tipo = ? AND costo = ?";
-        boolean flag = false;
-        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
-            ps.setString(1, id);
-            ps.setFloat(2, Float.parseFloat(precio));
-            try (ResultSet rs =  ps.executeQuery()) {
-                if (rs.next()) {
-                    flag = true;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return flag;
     }
 }

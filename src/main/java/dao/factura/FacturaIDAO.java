@@ -32,7 +32,6 @@ public class FacturaIDAO implements FacturaDAO{
             ps.setString(2, f.getNitCliente());
             ps.setString(3, f.getFecha().toString());
             ps.setString(4, f.getVendedor());
-            ps.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

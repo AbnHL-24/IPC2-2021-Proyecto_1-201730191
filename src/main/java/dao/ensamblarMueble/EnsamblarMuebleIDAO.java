@@ -28,15 +28,13 @@ public class EnsamblarMuebleIDAO implements EnsamblarMuebleDAO{
 
     @Override
     public void crear(EnsamblarMueble eM) {
-        String consulta = "INSERT INTO EnsamblarMueble VALUES(?, ?, ?, ?, ?)";
+        String consulta = "INSERT INTO EnsamblarMueble(fecha, mueble, usuario, estado_venta) VALUES(?, ?, ?, ?)";
 
         try (PreparedStatement ps = conexion.prepareStatement(consulta)) {
-            ps.setInt(1, eM.getIdEnsambleMueble());
-            ps.setString(2, eM.getFecha().toString());
-            ps.setString(3, eM.getMueble());
-            ps.setString(4, eM.getUsuario());
-            ps.setInt(5, eM.getEstadoVenta());
-            ps.executeUpdate();
+            ps.setString(1, eM.getFecha().toString());
+            ps.setString(2, eM.getMueble());
+            ps.setString(3, eM.getUsuario());
+            ps.setInt(4, eM.getEstadoVenta());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

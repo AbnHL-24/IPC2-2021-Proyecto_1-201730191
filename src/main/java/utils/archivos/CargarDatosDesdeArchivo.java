@@ -80,7 +80,9 @@ public class CargarDatosDesdeArchivo {
 
             } else if (datos.get(i).toUpperCase().startsWith("MUEBLE")) {
                 MuebleIDAO muebleIDAO = MuebleIDAO.getMuebleIDAO();
-                if (!muebleIDAO.existe(parametros[0])) {
+                System.out.println(parametros[0]);
+                try {
+                    System.out.println(datos.get(i));
                     if (validarMueble(parametros)) {
                         Mueble mueble = Mueble.builder()
                                 .mueble(parametros[0])
@@ -88,6 +90,8 @@ public class CargarDatosDesdeArchivo {
                                 .build();
                         muebleIDAO.crear(mueble);
                     }
+                } catch (Exception e) {
+                    e.printStackTrace(System.out);
                 }
 
             } else if (datos.get(i).toUpperCase().startsWith("ENSAMBLE_PIEZAS")) {
@@ -114,7 +118,7 @@ public class CargarDatosDesdeArchivo {
                 MuebleIDAO muebleIDAO = MuebleIDAO.getMuebleIDAO();
                 UsuarioIDAO usuarioIDAO = UsuarioIDAO.getUsuarioIDAO();
                 EnsamblarMuebleIDAO ensamblarMuebleIDAO = EnsamblarMuebleIDAO.getEnsamblarMuebleIDAO();
-                if (muebleIDAO.existe(parametros[0])) {
+                try {
                     if (usuarioIDAO.existe(parametros[1])) {
                         EnsamblarMueble ensamblarMueble = EnsamblarMueble.builder()
                                 .mueble(parametros[0])
@@ -124,6 +128,8 @@ public class CargarDatosDesdeArchivo {
                                 .build();
                         ensamblarMuebleIDAO.crear(ensamblarMueble);
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
             } else if (datos.get(i).toUpperCase().startsWith("CLIENTE")) {

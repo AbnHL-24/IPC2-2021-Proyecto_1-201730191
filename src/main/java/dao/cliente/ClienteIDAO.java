@@ -69,7 +69,17 @@ public class ClienteIDAO implements ClienteDAO {
 
     @Override
     public void actualizar(Cliente c) {
-        
+        String sql = "UPDATE Cliente SET nombre = ?, direccion=?, municipio=?, departamento=? WHERE nit_cliente = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, c.getNombre());
+            ps.setString(2, c.getDireccion());
+            ps.setString(3, c.getMunicipio());
+            ps.setString(4, c.getDepartamento());
+            ps.setString(5, c.getNitCliente());
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        }
     }
 
     @Override

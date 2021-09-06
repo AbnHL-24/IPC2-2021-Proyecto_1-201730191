@@ -7,8 +7,8 @@ import java.sql.SQLException;
 public class Conexion {
     private static Connection conexion = null;
     private final String url = "jdbc:mariadb://localhost:3306/MiMuebleriaBD";
-    private final String usuario = "root";
-    private final String password = "1235";
+    private final String usuario = "userDB";
+    private final String password = "123";
 
     private Conexion() {
         try {

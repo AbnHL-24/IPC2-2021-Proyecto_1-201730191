@@ -10,6 +10,7 @@ public class ValidacionMueble {
             if (isFloat(parametros[1])) {
                 flag = true;
             }
-        }        return flag;
+        }
+        return flag;
     }
 }

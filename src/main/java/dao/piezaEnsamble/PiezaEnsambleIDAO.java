@@ -25,13 +25,12 @@ public class PiezaEnsambleIDAO implements PiezaEnsambleDAO{
 
     @Override
     public void crear(PiezaEnsamble pE) {
-        String consulta = "INSERT INTO PiezaParaEnsamble VALUES(?, ?, ?)";
+        String consulta = "INSERT INTO PiezaParaEnsamble(mueble, pieza, cantidad) VALUES(?, ?, ?)";
 
         try (PreparedStatement ps = conexion.prepareStatement(consulta)) {
-            ps.setString(1, pE.getMubele().toString());
+            ps.setString(1, pE.getMubele());
             ps.setString(2, pE.getPieza());
             ps.setString(3, pE.getCantidad());
-            ps.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -62,7 +61,6 @@ public class PiezaEnsambleIDAO implements PiezaEnsambleDAO{
         return false;
     }
 
-    @Override
     public boolean existe(String mueble, String pieza) {
         String sql = "SELECT id FROM PiezaParaEnsamble WHERE mueble = ? AND pieza = ?";
         boolean flag = false;

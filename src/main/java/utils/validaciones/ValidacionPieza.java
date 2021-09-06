@@ -11,6 +11,6 @@ public class ValidacionPieza {
                 flag = true;
             }
         }
-        return false;
+        return flag;
     }
 }

@@ -26,14 +26,12 @@ public class DetalleEnsambleIDAO implements DetalleEnsambleDAO{
 
     @Override
     public void crear(DetalleEnsamble dE) {
-        String consulta = "INSERT INTO DetalleEnsamble VALUES(?, ?, ?, ?)";
+        String consulta = "INSERT INTO DetalleEnsamble(id_ensamble, id_pieza, costo_venta) VALUES(?, ?, ?)";
 
         try (PreparedStatement ps = connecxion.prepareStatement(consulta)) {
-            ps.setInt(1, dE.getIdDetalleEnsamble());
-            ps.setInt(2, dE.getIdEnsamble());
-            ps.setInt(3, dE.getIdPieza());
-            ps.setInt(4, dE.getCostoVenta());
-            ps.executeUpdate();
+            ps.setInt(1, dE.getIdEnsamble());
+            ps.setInt(2, dE.getIdPieza());
+            ps.setInt(3, dE.getCostoVenta());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
