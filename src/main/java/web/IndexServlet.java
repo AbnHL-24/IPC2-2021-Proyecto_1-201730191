@@ -40,9 +40,9 @@ public class IndexServlet extends HttpServlet {
             if (sesion.getAttribute("user") != null) {
 
                 switch (user.getTipoUsuario()) {
-                    case 1 -> resp.sendRedirect("admon/inicioAdmon.jsp");
-                    case 3 -> resp.sendRedirect("fabrica/inicioFabrica.jsp");
-                    case 2 -> resp.sendRedirect("ventas/inicioVentas.jsp");
+                    case 1: {resp.sendRedirect("admon/inicioAdmon.jsp");}
+                    case 3: {resp.sendRedirect("fabrica/inicioFabrica.jsp");}
+                    case 2: {resp.sendRedirect("ventas/inicioVentas.jsp");}
                 }
             } else {
                 resp.sendRedirect("login.jsp");

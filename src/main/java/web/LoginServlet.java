@@ -47,9 +47,9 @@ public class LoginServlet extends HttpServlet {
                     sesion.setAttribute("user", user);
 
                     switch (user.getTipoUsuario()) {
-                        case 1 -> resp.sendRedirect("admon/inicioAdmon.jsp");
-                        case 2 -> resp.sendRedirect("ventas/inicioVentas.jsp");
-                        case 3 -> resp.sendRedirect("fabrica/inicioFabrica.jsp");
+                        case 1: { resp.sendRedirect("admon/inicioAdmon.jsp");}
+                        case 2: { resp.sendRedirect("ventas/inicioVentas.jsp");}
+                        case 3: {resp.sendRedirect("fabrica/inicioFabrica.jsp");}
                     }
                 } else {
                     req.setAttribute("errorLogin", "El usuario esta deshabilitado");
